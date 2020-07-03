@@ -1,1 +1,1 @@
-# wmh_pytorch
+# wmh_segmentation
