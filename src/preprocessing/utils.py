@@ -119,8 +119,8 @@ def save_data_labels(dir_path, index, data, data_name, labels, labels_name):
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
 
-    joblib.dump(data, os.path.join(dir_path, "{}_{}".format(index, data_name)))
-    joblib.dump(labels, os.path.join(dir_path, "{}_{}".format(index, labels_name)))
+    joblib.dump(data, os.path.join(dir_path, "{}_{}".format(str(index), data_name)))
+    joblib.dump(labels, os.path.join(dir_path, "{}_{}".format(str(index), labels_name)))
 
 
 

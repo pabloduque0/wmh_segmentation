@@ -106,13 +106,18 @@ def main(input_path, output_path):
         data_validation, labels_validation = datalabels_validation
         data_test, labels_test = datalabels_test
 
-        print("TRAIN", data_train.shape, labels_train.shape)
-        print("VALIDATION", data_validation.shape, labels_validation.shape)
-        print("TEST", data_test.shape, labels_test.shape)
+        del datalabels_train, datalabels_validation, datalabels_test
 
-        utils.save_data_labels(os.path.join(output_path, i, cons.TRAIN_FOLDER), data_train, cons.DATA_TRAIN_NAME, labels_train, cons.LABELS_TRAIN_NAME)
-        utils.save_data_labels(os.path.join(output_path, i, cons.VALIDATION_FOLDER), data_validation, cons.DATA_VALIDATION_NAME, labels_validation, cons.LABELS_VALIDATION_NAME)
-        utils.save_data_labels(os.path.join(output_path, i, cons.TEST_FOLDER), data_test, cons.DATA_TEST_NAME, labels_test, cons.LABELS_TEST_NAME)
+        print(i, "TRAIN", data_train.shape, labels_train.shape)
+        print(i, "VALIDATION", data_validation.shape, labels_validation.shape)
+        print(i, "TEST", data_test.shape, labels_test.shape)
+
+        utils.save_data_labels(os.path.join(output_path, cons.TRAIN_FOLDER), i, data_train, cons.DATA_TRAIN_NAME, labels_train, cons.LABELS_TRAIN_NAME)
+        utils.save_data_labels(os.path.join(output_path, cons.VALIDATION_FOLDER), i, data_validation, cons.DATA_VALIDATION_NAME, labels_validation, cons.LABELS_VALIDATION_NAME)
+        utils.save_data_labels(os.path.join(output_path, cons.TEST_FOLDER), i, data_test, cons.DATA_TEST_NAME, labels_test, cons.LABELS_TEST_NAME)
+
+        del data_train, labels_train, data_validation, labels_validation, data_test, labels_test
+        gc.collect()
 
 
 
