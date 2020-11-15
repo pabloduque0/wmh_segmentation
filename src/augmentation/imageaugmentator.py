@@ -8,10 +8,9 @@
 import numpy as np
 import scipy.ndimage as ndi
 import gc
-from keras.preprocessing.image import apply_affine_transform
+from tensorflow.keras.preprocessing.image import apply_affine_transform
 import random
 import cv2
-from augmentation import utils
 
 class ImageAugmentator():
 
@@ -24,7 +23,7 @@ class ImageAugmentator():
         self.zy_range = zy_range
         self.shear_range = shear_range
 
-    def perform_all_augmentations(self, dataset_x, dataset_y, mix_up=False, visualize=False):
+    def perform_all_augmentations(self, dataset_x, dataset_y, visualize=False):
 
         if len(dataset_x) != len(dataset_y):
             raise ValueError("Wrong input. Image lists must be have the same length.")
@@ -77,18 +76,13 @@ class ImageAugmentator():
         #del idx_group1, idx_group2, non_black_indices.copy(), idx_group4, idx_group5
         gc.collect()
 
-        if mix_up:
-            mixed_x, mixed_y = self.apply_mixup(non_black_indices, dataset_x, dataset_y)
-            aug_dataset_x = np.concatenate([aug_dataset_x, mixed_x], axis=0)
-            aug_dataset_y = np.concatenate([aug_dataset_y, mixed_y], axis=0)
-
         if visualize:
             self.visualize_data_augmentation(dataset_x[non_black_indices],
                                          dataset_y[non_black_indices],
                                      aug_dataset_x[len(dataset_x):, ...],
                                      aug_dataset_y[len(dataset_y):, ...])
 
-        return aug_dataset_x, aug_dataset_y
+        return np.asanyarray(aug_dataset_x), np.asanyarray(aug_dataset_y)
 
     def apply_mixup(self, non_black_indices, images_x, images_y, alpha=0.4):
 
