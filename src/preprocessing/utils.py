@@ -5,6 +5,8 @@ import cv2
 import numpy as np
 import SimpleITK
 import joblib
+from shutil import copyfile
+
 
 def get_all_image_paths():
     paths = []
@@ -331,3 +333,13 @@ def get_coordinates(data_list):
 
 
     return coord_data_list
+
+
+def copy_original_data(input_paths, output_path, sub_folder, global_index, raw_folder="raw_copies"):
+    path = os.path.join(output_path, sub_folder, raw_folder)
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    raw_niis = [SimpleITK.ReadImage(input_path) for input_path in input_paths]
+    joblib.dump(raw_niis, os.path.join(path, f"{global_index}_flair_raws.pkl"))
+
