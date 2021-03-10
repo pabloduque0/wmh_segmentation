@@ -83,6 +83,33 @@ def full_custom_split(datasets, indices_split):
 
     return train_data, validation_data, test_data
 
+
+def concat_save_data(data_t1, data_flair):
+    concat_data = []
+    for t1, flair in zip(data_t1, data_flair):
+        concat = np.concatenate([np.expand_dims(t1, axis=-1),
+                                 np.expand_dims(flair, axis=-1)], axis=3)
+        concat_data.append(concat)
+
+    return concat_data
+
+
+def full_custom_split_for_save(datasets, indices_split):
+
+    validation_data = []
+    test_data = []
+
+    for dataset in datasets:
+        single_dataset_train, single_dataset_validation, single_dataset_test = custom_split(dataset,
+                                                                                            indices_split)
+        validation_data.append(np.concatenate(single_dataset_validation))
+        test_data.append(single_dataset_test)
+
+
+
+    return validation_data, test_data
+
+
 def custom_split(data, indices):
 
     data = np.array(data)
@@ -335,11 +362,11 @@ def get_coordinates(data_list):
     return coord_data_list
 
 
-def copy_original_data(input_paths, output_path, sub_folder, global_index, raw_folder="raw_copies"):
+def copy_original_data(input_paths, output_path, sub_folder, global_index, raw_folder="raw_copies", filename="{}_flair_raws.pkl"):
     path = os.path.join(output_path, sub_folder, raw_folder)
     if not os.path.exists(path):
         os.mkdir(path)
 
     raw_niis = [SimpleITK.ReadImage(input_path) for input_path in input_paths]
-    joblib.dump(raw_niis, os.path.join(path, f"{global_index}_flair_raws.pkl"))
+    joblib.dump(raw_niis, os.path.join(path, filename.format(global_index)))
 
